@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>SQL Injection DEMO</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="navbar-nav">
+      <a class="nav-link active" href="/login.html">Safe Login</a>
+      <a class="nav-link" href="/injection.html">SQL Injection Demo</a>
+    </div>
+  </nav>
+  </div>
+  <div class="container py-5">
+    <div class="bg-light p-5 rounded-lg m-3">
+      <h1 class="display-4 mb-3">Login with Prepared Statements ✅</h1>
+      <form>
+        <div class="form-group">
+          <input type="email" class="form-control" id="email" name="email" placeholder="Email" required />
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control" id="password" name="password" placeholder="Password" required />
+        </div>
+        <button type="submit" class="btn btn-primary" onclick="loginHandler(); return false;">Login</button>
+      </form>
+    </div>
+  </div>
+  <div class="container py-5">
+    <div class="bg-light p-5 rounded-lg m-3">
+      <h2 class="display-4">SQL Injection Instructions</h2>
+      <p class="lead">Use the credentials below to log in normally:</p>
+      <div class="bg-white p-3 rounded shadow-sm">
+        <p>Email: <kbd>email</kbd></p>
+        <p>Password: <kbd>password</kbd></p>
+      </div>
+      <p class="lead mt-4">Now, try the SQL injection payload:</p>
+      <div class="bg-white p-3 rounded shadow-sm">
+        <p>Email: <kbd>' OR '1'='1' --</kbd> </p>
+        <p>Password: <kbd>' OR '1'='1' --</kbd> </p>
+      </div>
+      <p class="mt-4">Notice how the behavior changes with the injected SQL code.</p>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    const loginHandler = () => {
+      const email = document.querySelector('input[name="email"]').value;
+      const password = document.querySelector('input[name="password"]').value;
+
+      fetch("/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      })
+        .then((res) => {
+          res.redirected
+            ? (window.location.href = res.url)
+            : (window.location.href = "/");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+  </script>
+</body>
+
+</html>
